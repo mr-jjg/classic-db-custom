@@ -1,0 +1,12 @@
+# Scratch / analysis
+work/
+*.sql.bak
+*.tmp
+
+# OS/editor noise
+.DS_Store
+*.swp
+*.log
+
+# Credentials (defensive)
+*.env
