@@ -44,30 +44,33 @@ WHERE item = 5085
    Item: 5030 - Centaur Bracers
    Source: https://www.wowhead.com/classic/item=5030/centaur-bracers
    Notes:
-   - Magnitude delta correction from pervasive -80 and one -100 upstream values.
-   - Geolocation cohort smoothing applied so mobs sharing the same oasis cluster have comparable quest-drop contribution.
+   - Original upstream values were predominantly -80 and one -100.
+   - Policy-derived values were adjusted upward via punish compensation
+     to avoid excessive grind after magnitude collapse.
+   - Rates are tiered by mob difficulty and rarity, preserving progression
+     while reducing punitive variance.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
+SET ChanceOrQuestChance = -60
+WHERE item = 5030
+  AND entry = 3272;
+
+UPDATE creature_loot_template
 SET ChanceOrQuestChance = -50
 WHERE item = 5030
-  AND entry IN (3272);
+  AND entry IN (3273, 5837, 3394);
 
 UPDATE creature_loot_template
 SET ChanceOrQuestChance = -40
 WHERE item = 5030
-  AND entry IN (3273, 3394, 5837);
+  AND entry IN (3274, 3275, 3397, 5838, 3395, 5841);
 
 UPDATE creature_loot_template
 SET ChanceOrQuestChance = -30
 WHERE item = 5030
-  AND entry IN (3274, 3275, 3397, 3395, 5838, 5841);
-
-UPDATE creature_loot_template
-SET ChanceOrQuestChance = -20
-WHERE item = 5030
-  AND entry IN (3396, 9456, 9523, 9524);
+  AND entry IN (9523, 9524, 9456, 3396);
 
 
 
