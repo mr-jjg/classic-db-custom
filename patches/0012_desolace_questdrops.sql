@@ -88,7 +88,7 @@ WHERE item = 6250
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -6
+SET ChanceOrQuestChance = 6
 WHERE item = 20310
   AND entry IN (4663, 4664, 4666, 4665, 4705, 4668, 4667, 13019);
 
