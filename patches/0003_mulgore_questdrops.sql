@@ -185,7 +185,15 @@ WHERE item = 4806
    Source: https://www.wowhead.com/classic/item=4759/plainstrider-talon
    Notes:
    - Off-scope and unintended droppers removed to keep the quest localized to Mulgore.
+   - Preserves quest-directed pacing by keeping the primary “adult plainstrider” dropper higher,
+     while reducing secondary droppers to avoid wide-zone targeting.
    --------------------------------------------------------------------- */
+
+/* UPDATEs */
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -25
+WHERE item = 4759
+  AND entry IN (2957, 3068);
 
 /* DELETEs */
 DELETE FROM creature_loot_template
