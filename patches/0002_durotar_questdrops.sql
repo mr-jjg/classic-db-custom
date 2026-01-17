@@ -13,6 +13,9 @@ https://www.wowhead.com/classic/items/quest?filter=16;14;0
 /* ---------------------------------------------------------------------
    Item: 4870 - Canvas Scraps
    Source: https://www.wowhead.com/classic/item=4870/canvas-scraps
+   Notes:
+   - Increases drop rate on nearby Tiragarde Keep human mobs while
+     retaining higher drop rates for geographically distant centaurs.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
