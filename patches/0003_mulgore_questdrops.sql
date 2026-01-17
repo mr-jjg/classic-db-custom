@@ -16,17 +16,75 @@ https://www.wowhead.com/classic/items/quest?filter=16;215;0
    Notes:
    - Telemetry-derived lower bound ≈ 45%, rounded to -50 per policy.
    - Existing DB value was -80; reduction qualifies under magnitude delta rule.
-   - Pacing compensation applied (+10) due to collapse from high upstream magnitude
-     in a multi-item quest (6 Azure + 6 Bronze).
-   - Without compensation, expected total kills for the quest increase from ~15
-     to ~27; with compensation, expected kills are ~22.
+   --------------------------------------------------------------------- */
+
+/* UPDATEs */
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -50
+WHERE item = 4752
+  AND entry = 2964;
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 4849 - Battleboar Flank
+   Source: https://www.wowhead.com/classic/item=4849/battleboar-flank
+   Notes:
+   - Telemetry-derived value ≈ 50%, rounded to -60 per policy.
+   - Existing DB value was -80; reduction qualifies under magnitude delta rule.
+   - Bristleback Battleboar rate increased relative to strict telemetry to
+     account for off-quest kills and cave-sequencing behavior.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
 SET ChanceOrQuestChance = -60
-WHERE item = 4752
-  AND entry = 2964;
+WHERE entry = 2966 AND item = 4849;
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -40
+WHERE entry = 2954 AND item = 4849;
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 4848 - Battleboar Snout
+   Source: https://www.wowhead.com/classic/item=4848/battleboar-snout
+   Notes:
+   - Telemetry-derived value ≈ 50%, rounded to -60 per policy.
+   - Existing DB value was -80; reduction qualifies under magnitude delta rule.
+   - Bristleback Battleboar rate increased relative to strict telemetry to
+     account for off-quest kills and cave-sequencing behavior.
+   --------------------------------------------------------------------- */
+
+/* UPDATEs */
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -60
+WHERE entry = 2966 AND item = 4848;
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -40
+WHERE entry = 2954 AND item = 4848;
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 4770 - Bristleback Belt
+   Source: https://www.wowhead.com/classic/item=4770/bristleback-belt
+   Notes:
+   - Telemetry-derived values: Quilboar ≈ 68% -> -70; Shaman ≈ 54% -> -60 per policy.
+   - Existing DB value was -80; reduced under quest collapse rule to avoid
+     completing a 12-item requirement in considerably fewer kills than intended.
+   --------------------------------------------------------------------- */
+
+/* UPDATEs */
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -70
+WHERE entry = 2953 AND item = 4770;
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -60
+WHERE entry = 2952 AND item = 4770;
 
 
 
@@ -36,15 +94,11 @@ WHERE item = 4752
    Notes:
    - Telemetry-derived lower bound ≈ 40%, rounded to -40 per policy.
    - Existing DB value was -80; reduction qualifies under magnitude delta rule.
-   - Pacing compensation applied (+10) due to collapse from high upstream magnitude
-     in a multi-item quest (6 Azure + 6 Bronze).
-   - Compensation preserves quest pacing consistency while retaining
-     telemetry-informed asymmetry between feather types.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 4753
   AND entry = 2965;
 
@@ -53,12 +107,15 @@ WHERE item = 4753
 /* ---------------------------------------------------------------------
    Item: 4805 - Flatland Cougar Femur
    Source: https://www.wowhead.com/classic/item=4805/flatland-cougar-femur
-   Notes: Mazzranache pacing normalization to -15
+   Notes:
+   - Intended as the rarest component of the Mazzranache quest.
+   - Low-probability single-drop item designed for incidental acquisition
+     across the zone rather than targeted farming.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = -10
 WHERE item = 4805
   AND entry = 3035;
 
@@ -104,9 +161,10 @@ WHERE item = 4739
    Item: 4806 - Plainstrider Scale
    Source: https://www.wowhead.com/classic/item=4806/plainstrider-scale
    Notes:
-   - Mazzranache pacing normalization to -15
-   - Off-scope and unintended droppers removed to keep the quest localized to Mulgore
-     and avoid early-area or cross-zone completion.
+   - Single-drop component of the Mazzranache quest.
+   - Drop sources restricted to Mulgore plainstriders to prevent
+     off-zone acquisition and unintended quest completion.
+   - Barrens plainstrider entries removed per deletion rule.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
@@ -139,7 +197,10 @@ WHERE item = 4759
 /* ---------------------------------------------------------------------
    Item: 4804 - Prairie Wolf Heart
    Source: https://www.wowhead.com/classic/item=4804/prairie-wolf-heart
-   Notes: Mazzranache pacing normalization to -15
+   Notes:
+   - Moderate-probability single-drop quest item.
+   - Balanced for incidental completion while performing other
+     Prairie Wolf–related quests in Mulgore.
    --------------------------------------------------------------------- */
 
 UPDATE creature_loot_template
@@ -170,7 +231,10 @@ WHERE item = 4702
 /* ---------------------------------------------------------------------
    Item: 4807 - Swoop Gizzard
    Source: https://www.wowhead.com/classic/item=4807/swoop-gizzard
-   Bundle: Mazzranache pacing normalization to -15
+   Notes:
+   - Highest-probability component of the Mazzranache quest.
+   - Frequently obtained early during normal quest flow,
+     establishing forward progress on a zone-wide rare-item quest.
    --------------------------------------------------------------------- */
 
 UPDATE creature_loot_template
