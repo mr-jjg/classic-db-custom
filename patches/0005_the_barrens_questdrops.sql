@@ -95,13 +95,15 @@ WHERE item = 5026
    Item: 5065 - Harpy Lieutenant Ring
    Source: https://www.wowhead.com/classic/item=5065/harpy-lieutenant-ring
    Notes:
-   - Magnitude delta correction with Barrens pacing compensation:
-     base telemetry rounding plus compensation for shared camp dilution by non-dropping harpies.
+   - Magnitude delta correction: upstream quest drop value (-80) collapses
+     sharply relative to large-sample Classic telemetry (~25–33%).
+   - Pacing compensation applied to prevent punitive grind regression after
+     normalization; value set above pure policy-derived floor.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 5065
   AND entry IN (3278);
 
@@ -144,14 +146,20 @@ WHERE item = 15852
    Item: 4896 - Kodo Liver
    Source: https://www.wowhead.com/classic/item=4896/kodo-liver
    Notes:
-   - Magnitude delta correction with maximum Barrens pacing compensation.
-   - Kodos are low-density roaming mobs with no fixed camps; availability, not RNG, is the primary constraint.
-   - Ceiling applied to prevent punitive grind after normalization.
+   - Magnitude delta correction: upstream quest drop value (-80) collapses
+     relative to large-sample Classic telemetry (~16–22% across Kodo variants).
+   - Punish compensation (+10) applied to prevent punitive grind following
+     normalization from legacy values.
+   - Additional competition compensation applied due to wandering spawn
+     behavior and dilution by other non-dropping Barrens mobs encountered
+     during traversal.
+   - Drop rates equalized across all Kodo types (including named and rare)
+     to avoid incentivizing specific targeting.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -60
+SET ChanceOrQuestChance = -50
 WHERE item = 4896
   AND entry IN (3234, 3235, 3236, 3237, 3474, 5827);
 
@@ -168,7 +176,7 @@ WHERE item = 4896
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 5087
   AND entry IN (3244, 3245, 3246);
 
@@ -209,15 +217,19 @@ WHERE item = 5062
    Item: 5165 - Sunscale Feather
    Source: https://www.wowhead.com/classic/item=5165/sunscale-feather
    Notes:
-   - Magnitude delta correction applied: upstream value (-80) exceeds observed quest pacing for a low-count collection item.
-   - Feathers are not guaranteed drops; player reports indicate variable outcomes, including dry streaks.
-   - Moderate pacing compensation applied due to localized spawn clustering and incidental competition near nest areas.
-   - Normalized across all Sunscale raptor variants to avoid mob targeting.
+   - Magnitude delta correction applied (baseline -80 normalized).
+   - Quest requires only 3 feathers; intended completion is immediate once
+     the correct raptor variants are targeted.
+   - Equalized across Sunscale Lashtail / Screecher / Scytheclaw to prevent
+     punitive variance from wrong-target kills.
+   - Punish compensation (+10) applied after normalization, resulting in -40.
+   - No competition compensation applied; observed friction is primarily
+     density/traffic near nests rather than shared spawn-pool dilution.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 5165
   AND entry IN (3254, 3255, 3256);
 
@@ -227,25 +239,20 @@ WHERE item = 5165
    Item: 5143 - Thunder Lizard Blood
    Source: https://www.wowhead.com/classic/item=5143/thunder-lizard-blood
    Notes:
-   - Barrens pacing adjustment informed by player reports of moderate drop rates with significant variance.
-   - Subtypes are tiered slightly to reflect recurring claims that higher-level variants drop more often, while keeping overall quest flow smooth.
+   - Legacy value (-80) overstates observed drop frequency.
+   - Player telemetry consistently indicates ~40–50% effective drop rate,
+     with typical completion in 3–6 kills.
+   - Normalized under the magnitude delta rule to align quest pacing with
+     empirical experience.
+   - No competition compensation applied: targets are abundant, quest-focused,
+     and evenly distributed across multiple subtypes.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -35
-WHERE item = 5143
-  AND entry IN (3240);
-
-UPDATE creature_loot_template
 SET ChanceOrQuestChance = -40
 WHERE item = 5143
-  AND entry IN (3239);
-
-UPDATE creature_loot_template
-SET ChanceOrQuestChance = -45
-WHERE item = 5143
-  AND entry IN (3238);
+  AND entry IN (3238, 3239, 3240);
 
 
 
@@ -253,16 +260,17 @@ WHERE item = 5143
    Item: 4897 - Thunderhawk Saliva Gland
    Source: https://www.wowhead.com/classic/item=4897/thunderhawk-saliva-gland
    Notes:
-   - Telemetry-derived base chance ~17%, rounded to 20% per policy.
-   - Pacing compensation applied due to magnitude collapse from -80
-     and mixed spawn competition in the southern Barrens.
-   - Final value reflects +10 collapse compensation and +10 competition
-     compensation for non-quest mobs sharing the area.
+   - Magnitude delta correction: upstream quest drop value (-80) collapses
+     relative to Classic telemetry (~17%) for Greater Thunderhawks.
+   - Punish compensation (+10) applied following normalization.
+   - Light competition compensation applied due to consistent co-location
+     with Stormhides and other non-dropping mobs that increase effective
+     grind time without contributing to quest progress.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -40
+SET ChanceOrQuestChance = -35
 WHERE item = 4897
   AND entry = 3249;
 
@@ -272,11 +280,16 @@ WHERE item = 4897
    Item: 5086 - Zhevra Hooves
    Source: https://www.wowhead.com/classic/item=5086/zhevra-hooves
    Notes:
-   - Family-wide normalization: higher-level and rare entries retained for consistency, but tuned to match early quest flow.
+   - Quest target for a level 13 Barrens quest with primary drops from
+     Zhevra Runners (13–14), which show ~30% telemetry presence.
+   - Legacy values (-80) exceed observed player experience and telemetry.
+   - Magnitude delta collapse applied to normalize excessive quest chance.
+   - Set to -40 to align with runner-dominant drop behavior while preserving
+     expected early-game grind and variance.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 5086
   AND entry IN (3242, 3426, 3466, 5831);
