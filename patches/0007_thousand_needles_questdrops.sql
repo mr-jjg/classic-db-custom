@@ -72,6 +72,25 @@ WHERE item = 5794
 
 
 /* ---------------------------------------------------------------------
+   Item: 5855 - Silithid Heart
+   Source: https://www.wowhead.com/classic/item=5855/silithid-heart
+   Notes:
+   - Telemetry-derived collapse: upstream (-30) contradicts large-sample data
+     (≈1.4–5.3% across eligible mobs).
+   - Policy derivation based on actual ratios:
+       max(1732 / 32948) ≈ 5.26% → ceil → 6% → +1 = 7%.
+   - Equalized across all eligible silithid mobs.
+   --------------------------------------------------------------------- */
+
+/* UPDATEs */
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -7
+WHERE item = 5855
+  AND entry IN (4130, 4131, 4132, 4133);
+
+
+
+/* ---------------------------------------------------------------------
    Item: 5854 - Silithid Talon
    Source: https://www.wowhead.com/classic/item=5854/silithid-talon
    Notes:
@@ -91,11 +110,21 @@ WHERE item = 5854
    Item: 5842 - Unrefined Ore Sample
    Source: https://www.wowhead.com/classic/item=5842/unrefined-ore-sample
    Notes:
-   - Equalized all droppers (including the rare mob) to the maximum policy-derived value to avoid mob targeting.
+   - Telemetry indicates high per-kill drop rates with severe spawn scarcity:
+     * Gravelsnout Surveyor ~53%
+     * Gravelsnout Digger ~48%
+   - Values normalized using actual telemetry-derived rates.
+   - Surveyor retained as higher-yield source.
+   - Rare mob (Gibblesnik) equalized downward to lowest common value per contract.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
 SET ChanceOrQuestChance = -60
 WHERE item = 5842
-  AND entry IN (4113, 4116, 14427);
+  AND entry = 4116;
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -50
+WHERE item = 5842
+  AND entry IN (4113, 14427);
