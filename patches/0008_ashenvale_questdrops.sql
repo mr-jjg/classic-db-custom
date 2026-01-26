@@ -41,6 +41,12 @@ WHERE item = 5463
 /* ---------------------------------------------------------------------
    Item: 5366 - Glowing Soul Gem
    Source: https://www.wowhead.com/classic/item=5366/glowing-soul-gem
+   Notes:
+   - Primary Ashenvale sources cluster ~9–10% in Wowhead telemetry.
+   - Contract v3.0 rounding yields new_val = 15%.
+   - Assassin telemetry is quest-conditional but included upstream; chance
+     equalized to avoid conditional outlier behavior.
+   - Limited spawn pool likely amplifies perceived quest pain.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
