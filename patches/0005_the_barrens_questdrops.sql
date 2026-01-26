@@ -75,6 +75,21 @@ WHERE item = 5030
 
 
 /* ---------------------------------------------------------------------
+   Item: 5092 - Charred Razormane Wand
+   Source: https://www.wowhead.com/classic/item=5092/charred-razormane-wand
+   Notes:
+   - Normal drop (non-quest-conditional).
+   - Telemetry directly reflects true drop chance.
+   - Value set to ceil(telemetry), no normalization applied.
+--------------------------------------------------------------------- */
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = 26
+WHERE entry = 3458 AND item = 5092;
+
+
+
+/* ---------------------------------------------------------------------
    Item: 5026 - Fire Tar
    Source: https://www.wowhead.com/classic/item=5026/fire-tar
    Notes:
@@ -210,6 +225,40 @@ UPDATE creature_loot_template
 SET ChanceOrQuestChance = -100
 WHERE item = 5062
   AND entry IN (3254, 3255, 3256, 3257, 5842);
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 5093 - Razormane Backstabber
+   Source: https://www.wowhead.com/classic/item=5093/razormane-backstabber
+   Notes:
+   - Normal drop from multiple NPCs.
+   - Telemetry directly reflects true drop chance.
+   - Values set to ceil(telemetry), no normalization applied.
+--------------------------------------------------------------------- */
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = 27
+WHERE entry = 3457 AND item = 5093;
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = 28
+WHERE entry = 3456 AND item = 5093;
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 5094 - Razormane War Shield
+   Source: https://www.wowhead.com/classic/item=5094/razormane-war-shield
+   Notes:
+   - Normal drop (non-quest-conditional).
+   - Telemetry directly reflects true drop chance.
+   - Value set to ceil(telemetry), no normalization applied.
+--------------------------------------------------------------------- */
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = 26
+WHERE entry = 3459 AND item = 5094;
 
 
 
