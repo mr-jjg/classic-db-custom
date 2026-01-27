@@ -1,5 +1,5 @@
-Version: 3.0
-Last updated: 2026-01-02
+Version: 3.1
+Last updated: 2026-01-26
 
 # CMaNGOS Quest Drop Tuning – Collaboration Protocol
 
@@ -141,7 +141,9 @@ Applying telemetry-derived corrections can unintentionally add excessive grind t
 
 When such a collapse occurs, a pacing compensation may be applied as follows:
 
-1. Punish Compensation: If the magnitude reduction is extreme (e.g., -80 or greater reduced to -30 or similar), add +10 percentage points to the policy-derived value. This compensation is applied once and reflects the base cost of a major normalization.
+1. Punish Compensation: If the magnitude reduction is extreme (for example, -80 or greater reduced to -30 or similar), a modest upward adjustment may be applied to reflect the base cost of a major normalization.
+   - If the policy-derived new_val is greater than 10, add up to +10 percentage points.
+   - If the policy-derived new_val is 10 or lower, add no more than +5 percentage points.
 
 2. Competition Compensation: For each non-quest, non-rare mob type that materially shares the same camp or respawn pool and increases effective grind (by diluting spawns, interfering with pulls, or occupying spawn nodes), add +5 percentage points per mob type.
 
