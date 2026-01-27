@@ -15,15 +15,15 @@ https://www.wowhead.com/classic/items/quest?filter=16:72;267:1;0:0#0+1+19
    Source: https://www.wowhead.com/classic/item=3477/creeper-ichor
    Quest: Elixir of Suffering
    Notes:
-   - Original upstream value of -100 caused extreme grind behavior.
-   - Normalized under magnitude delta rule with pacing compensation applied.
-   - Historical player reports indicate ~2–3% effective drop experience.
-   - Final value preserves rarity while avoiding punitive collapse.
+   - Magnitude delta correction from -100 (100% quest-conditional) to policy-derived rate.
+   - Base derivation from equalized low single-digit telemetry.
+   - +5 punish compensation applied due to extreme upstream over-tuning.
+   - Final value intentionally preserves “rare, gating item” identity without punitive grind.
    --------------------------------------------------------------------- */
 
 /* UPDATE */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -23
+SET ChanceOrQuestChance = -13
 WHERE item = 3477
   AND entry IN (2350, 14279, 2349, 2348);
 
@@ -53,17 +53,14 @@ WHERE item = 3509
    Source: https://www.wowhead.com/classic/item=3476/gray-bear-tongue
    Quest: Elixir of Suffering
    Notes:
-   - Original upstream values were -80 for common bears and -100 for the rare.
-   - Normalized under magnitude delta rule with pacing compensation applied.
-   - Historical reports indicate tongues are uncommon but generally acquired
-     well before Creeper Ichor; target keeps tongues annoying but not gating.
-   - Minor competition compensation applied due to shared farming loop with
-     adjacent quest mobs (bears/spiders/lions) in the same route.
+   - Magnitude delta correction from -80 / -100 to policy-derived mid-rate.
+   - Equalized across bear variants to avoid mob targeting.
+   - Value reflects expected player level range and distributed spawn availability.
    --------------------------------------------------------------------- */
 
 /* UPDATE */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -45
+SET ChanceOrQuestChance = -40
 WHERE item = 3476
   AND entry IN (2351, 2354, 2356, 14280);
 
@@ -123,15 +120,15 @@ WHERE item = 3496
    Item: 22229 - Soul Ashes of the Banished
    Source: https://www.wowhead.com/classic/item=22229/soul-ashes-of-the-banished
    Notes:
-   - .5 dungeon set quest item obtained from elite undead on Purgation Isle.
-   - Original -100 value produced extreme outliers (50–60 kills) under modern
-     Classic population pressure and limited spawn availability.
-   - Normalized via magnitude delta with punish compensation applied.
-   - New value targets ~5 expected kills while preserving elite-gated pacing.
+   - Tier 0.5 quest component (Components of Importance).
+   - Drops from elite undead on Purgation Isle, Hillsbrad Foothills.
+   - Extremely low mob density and long respawn timers.
+   - Telemetry indicates ~8% observed drop rate; upstream was incorrectly set to guaranteed (-100).
+   - Normalized to 14% to preserve rarity while mitigating spawn contention.
    --------------------------------------------------------------------- */
 
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -19
+SET ChanceOrQuestChance = -14
 WHERE item = 22229
   AND entry IN (7068, 7069, 7071, 7072, 7075);
 
@@ -158,15 +155,15 @@ WHERE item = 3510
    Item: 5620 - Vial of Innocent Blood
    Source: https://www.wowhead.com/classic/item=5620/vial-of-innocent-blood
    Notes:
-   - Normalized from extreme upstream value (-80).
-   - Applied magnitude delta correction.
-   - Applied punish compensation (+10) for large collapse.
-   - Applied competition compensation (+10) due to limited mob availability.
-   - Final effective quest drop rate: 50%.
+   - Quest-conditional drop (negative ChanceOrQuestChance).
+   - Wowhead telemetry for Syndicate Shadow Mage shows ~28% (large sample).
+   - Apply magnitude delta away from upstream -80 toward telemetry, plus a small
+     accessibility bump due to limited camp / local competition.
+   - Final value set to 40% (ChanceOrQuestChance = -40).
    --------------------------------------------------------------------- */
 
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -50
+SET ChanceOrQuestChance = -40
 WHERE item = 5620
   AND entry = 2244;
 
