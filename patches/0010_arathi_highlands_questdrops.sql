@@ -73,3 +73,22 @@ WHERE NOT EXISTS (
   WHERE entry = 2605
     AND item = 7273
 );
+
+
+
+/* ---------------------------------------------------------------------
+   Item: 4503 - Witherbark Tusk
+   Quest: 691 - Worth Its Weight in Gold (Alliance-only)
+   Source: Wowhead NPC telemetry (mixed-faction sample) + user reports
+   Notes:
+   - Wowhead kill telemetry is likely contaminated by Horde kills (quest-ineligible),
+     so observed rate is treated as a lower bound.
+   - Equalized across all known Witherbark droppers to reduce mob-type bias and
+     make completion predictable while grinding.
+   - Set to 40% quest-conditional drop (ChanceOrQuestChance = -40).
+--------------------------------------------------------------------- */
+
+UPDATE creature_loot_template
+SET ChanceOrQuestChance = -40
+WHERE item = 4503
+  AND entry IN (2605, 2558, 2557, 2556, 2555, 2554, 2553, 2552);
