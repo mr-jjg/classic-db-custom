@@ -1,5 +1,5 @@
-Version: 3.1
-Last updated: 2026-01-26
+Version: 3.15
+Last updated: 2026-01-31
 
 # CMaNGOS Quest Drop Tuning – Collaboration Protocol
 
@@ -141,7 +141,7 @@ Applying telemetry-derived corrections can unintentionally add excessive grind t
 
 When such a collapse occurs, a pacing compensation may be applied as follows:
 
-1. Punish Compensation: If the magnitude reduction is extreme (for example, -80 or greater reduced to -30 or similar), a modest upward adjustment may be applied to reflect the base cost of a major normalization.
+1. Punish Compensation: If the magnitude reduction is extreme (for example, -80 or greater reduced to -30 or similar), OR if a telemetry-derived normalization produces a single-digit policy-derived new_val (<= 10) from a materially higher existing DB value (abs(old_db_val) >= 30), a modest upward adjustment may be applied to reflect the base cost of a major normalization.
    - If the policy-derived new_val is greater than 10, add up to +10 percentage points.
    - If the policy-derived new_val is 10 or lower, add no more than +5 percentage points.
 
