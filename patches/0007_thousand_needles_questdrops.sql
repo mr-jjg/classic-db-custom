@@ -75,16 +75,15 @@ WHERE item = 5794
    Item: 5855 - Silithid Heart
    Source: https://www.wowhead.com/classic/item=5855/silithid-heart
    Notes:
-   - Telemetry-derived collapse: upstream (-30) contradicts large-sample data
-     (≈1.4–5.3% across eligible mobs).
-   - Policy derivation based on actual ratios:
-       max(1732 / 32948) ≈ 5.26% → ceil → 6% → +1 = 7%.
+   - Telemetry-derived collapse from upstream (-30) to a single-digit policy value.
+   - Policy baseline ≈7% from large-sample telemetry.
+   - Limited punish compensation applied (+5) to avoid punitive grind.
    - Equalized across all eligible silithid mobs.
    --------------------------------------------------------------------- */
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -7
+SET ChanceOrQuestChance = -12
 WHERE item = 5855
   AND entry IN (4130, 4131, 4132, 4133);
 
