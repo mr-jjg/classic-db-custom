@@ -1,5 +1,5 @@
-Version: 3.15
-Last updated: 2026-01-31
+Version: 4.00
+Last updated: 2026-02-06
 
 # CMaNGOS Quest Drop Tuning – Collaboration Protocol
 
@@ -154,6 +154,47 @@ When such a collapse occurs, a pacing compensation may be applied as follows:
 
 All such pacing compensations must be briefly documented in the per-item Notes block of the patch for traceability.
 
+### On Class Quest Items
+
+Class quest items require a separate signal-weighting model due to structural bias in public telemetry. These drops are quest-conditional and class-restricted, which changes how both telemetry and comments should be interpreted.
+
+Bias characteristics:
+
+- Telemetry is systematically deflated
+  Because:
+  - Only class-eligible players can receive the drop
+  - Non-eligible players still contribute kills to the denominator
+  - This pushes observed percentages downward
+
+- Comments are higher quality than usual
+  Because:
+  - Nearly every commenter is actively on the quest step
+  - Reported kill counts tend to be first-hand and recent
+  - The experience is memorable and more likely to be described in concrete terms
+
+Signal weighting model:
+
+1. If telemetry < comment corpus
+   - Treat telemetry as artificially low
+   - Anchor primarily to the comment-derived experience band
+   - Apply a policy-derived value consistent with reported kills-to-completion
+
+2. If telemetry > comment corpus
+   - Telemetry becomes the stronger anchor
+   - Since telemetry is already deflated by non-eligible kills, a higher telemetry value implies the real in-quest rate is at least that high
+   - Comments in this case are treated as conservative or noisy samples
+
+3. If telemetry ≈ comments
+   - Err on the side of generosity
+   - Select a value toward the upper end of the comment band
+   - Rationale: class quest steps should feel purposeful but not punitive, and telemetry still trends downward due to structural bias
+
+Practical interpretation:
+
+- Class quest drops should not be normalized aggressively
+- Reductions should be approached cautiously
+- When signals conflict, decisions are guided by bias direction, not just magnitude
+
 ### Quest-Conditional Semantics
 - If the existing database value is quest-conditional (negative),
   the derived value **must remain negative**.
@@ -170,23 +211,64 @@ Example:
 
 ## Input Contract (What Joel Sends)
 
+The assistant should assume the following inputs are authoritative and complete unless explicitly stated otherwise.
+
+### 1. Quest Context
+- The full quest description as shown on Wowhead (or equivalent), including:
+  - Quest name
+  - Quest text
+  - Required items and counts
+  - Exclusivity constraints:
+    - Class
+    - Faction
+    - Profession
+
+### 2. Comment Corpus
+- A curated excerpt of Wowhead / Thottbot / Allakhazam comments relevant to:
+  - Drop rate
+  - Kill counts
+  - Friction points (spawn scarcity vs drop scarcity)
+- The assistant is expected to:
+  - Infer approximate drop-rate bands from comments
+  - Distinguish spawn complaints from drop complaints
+
+### 3. Telemetry (When Provided)
+- Wowhead NPC telemetry tables (kill counts, drop percentages), if supplied.
+
+### 4. Upstream Database State
+- Exact `creature_loot_template` rows from the upstream DB, including:
+  - `entry`
+  - `item`
+  - `ChanceOrQuestChance`
+
+### 5. Explicit Prompt
+- A direct request such as:
+  - “What can we infer about the drop rate from the comments?”
+  - “Should we touch this?”
+  - “Output the item header and SQL.”
+- The assistant should not guess intent beyond what is explicitly asked.
+
+The assistant’s role is to evaluate these inputs under the current contract rules and propose a defensible action (or non-action), with reasoning that remains stable when reread months later.
+
+
 ### Preferred Format
 A table (spreadsheet or pasted text) with the following columns:
 
-| Column     | Required | Purpose |
-|-----------|----------|---------|
-| patch_id  | Yes      | Groups rows into one patch |
-| zone_id   | Yes      | Context only (e.g. 85) |
-| MOBLINK   | Yes      | Wowhead NPC URL (used for validation) |
-| entry     | Yes      | Creature entry ID (authoritative) |
-| item_id   | Yes      | Item ID |
-| action    | Yes      | UPDATE or DELETE |
-| new_value | Cond.    | Required for UPDATE; blank for DELETE |
-| comment   | Yes      | Human-readable item name |
+| Column    | Required | Purpose
+|-----------|----------|-------------------------------------------
+| patch_id  | Yes      | Groups rows into one patch
+| zone_id   | Yes      | Context only (e.g. 85)
+| MOBLINK   | Yes      | Wowhead NPC URL (used for validation)
+| entry     | Yes      | Creature entry ID (authoritative)
+| item_id   | Yes      | Item ID
+| action    | Yes      | UPDATE or DELETE and INSERT
+| new_value | Cond.    | Required for UPDATE and INSERT; blank for DELETE
+| comment   | Yes      | Human-readable item name
 
 ### Action Semantics
 - `UPDATE` → Set `ChanceOrQuestChance = new_value`
 - `DELETE` → Remove row entirely from `creature_loot_template`
+- `INSERT` → Add a new row to `creature_loot_template` when a valid quest drop is missing upstream.
 
 ### Numeric Conventions
 - `new_value` represents a **policy-derived final chance**, not a raw Wowhead percentage.
@@ -201,15 +283,8 @@ A table (spreadsheet or pasted text) with the following columns:
 - One `(entry, item_id)` pair per row
 - No conflicting actions for the same pair
 
----
 
-## Additional Context Joel Will Provide
-- Current DB state query:
-  ```sql
-  SELECT * FROM creature_loot_template WHERE item = <item_id>;
-```
-- Wowhead drop table text (counts, percentages)
-- Any judgment calls or rationale
+---
 
 ## Output Contract (What Orb Weaver Produces)
 
@@ -238,7 +313,7 @@ Notes:
 
 #### 2) Per-Item Block (Required for every item touched)
 
-For each item_id appearing in the patch, Orb Weaver will emit:
+For each item_id appearing in the patch, Orb Weaver will emit an item header:
 
 /* ---------------------------------------------------------------------
    Item: <item_id> - <Item Name>
@@ -247,15 +322,46 @@ For each item_id appearing in the patch, Orb Weaver will emit:
    - <Only include if needed: off-zone cleanup, magnitude delta rule, pacing override, contradictions>
    --------------------------------------------------------------------- */
 
-Notes are omitted for straightforward policy-derived updates. They exist only to document exceptions or non-obvious decisions.
+For each item header:
+- Source must always be the canonical Wowhead Classic item page.
+- The Source field is literal and must not be replaced with descriptions such as:
+  - "Wowhead telemetry"
+  - "Comment corpus"
+  - "Mixed sources"
+- Notes are omitted for straightforward policy-derived updates.
+- Notes exist only to document exceptions or non-obvious decisions.
 
-Then statements grouped with clear separators:
+Then statements grouped with strict, minimal separators:
 
 /* UPDATEs */
 <one UPDATE with entry IN (...) OR multiple UPDATEs, but all explicitly targeted by (entry, item_id)>
 
 /* DELETEs */
 <one DELETE with entry IN (...) OR multiple DELETEs, but all explicitly targeted by (entry, item_id)>
+
+/* INSERTs */
+<One INSERT per (entry, item_id) pair>
+- Explicitly specify:
+  - entry
+  - item
+  - ChanceOrQuestChance
+  - groupid = 0
+  - mincountOrRef = 1
+  - maxcount = 1
+  - condition_id = 0
+  - comments = <item name>
+
+## SQL hygiene:
+- The SQL section is execution-only.
+- No inline comments.
+- No trailing comments.
+- No descriptive text in or around statements.
+- Section headers must be exactly:
+  - /* UPDATEs */
+  - /* DELETEs */
+  - /* INSERTs */
+- No bulk INSERT ... SELECT patterns.
+- Each row should be individually auditable and reversible.
 
 #### 3) Targeting and Semantics (Required)
 
@@ -264,10 +370,6 @@ Then statements grouped with clear separators:
 - UPDATE sets ChanceOrQuestChance = new_value verbatim. Sign is meaningful.
 - Statements may be grouped using entry IN (...) for readability, but must remain unambiguous and explicit.
 - Idempotent behavior (safe to re-run)
-
-## Post-Apply Validation
-- Orb Weaver will suggest a validation query.
-- The expected result of that query will be explicitly stated.
 
 ## Backup and Safety Model
 - The WORLD database is backed up before each batch of changes.
