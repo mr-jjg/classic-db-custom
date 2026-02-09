@@ -24,8 +24,13 @@ WHERE item = 11818
 /* INSERTs */
 INSERT INTO creature_loot_template
 (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, comments)
-VALUES
-(15692, 11818, 7, 0, 1, 1, 0, 'Grimesilt Outhouse Key');
+SELECT 15692, 11818, 7, 0, 1, 1, 0, 'Grimesilt Outhouse Key'
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM creature_loot_template
+  WHERE entry = 15692
+    AND item = 11818
+);
 
 
 
@@ -37,8 +42,13 @@ VALUES
 /* INSERTs */
 INSERT INTO creature_loot_template
 (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, comments)
-VALUES
-(8281, 10509, -26, 0, 1, 1, 0, 'Heart of Flame');
+SELECT 8281, 10509, -26, 0, 1, 1, 0, 'Heart of Flame'
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM creature_loot_template
+  WHERE entry = 8281
+    AND item = 10509
+);
 
 
 
@@ -152,5 +162,10 @@ WHERE item = 10551
 /* INSERTs */
 INSERT INTO creature_loot_template
   (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, comments)
-VALUES
-  (15692, 10551, -30, 0, 1, 1, 0, 'Thorium Plated Dagger');
+SELECT 15692, 10551, -30, 0, 1, 1, 0, 'Thorium Plated Dagger'
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM creature_loot_template
+  WHERE entry = 15692
+    AND item = 10551
+);
