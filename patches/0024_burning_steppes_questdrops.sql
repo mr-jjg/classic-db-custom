@@ -51,7 +51,7 @@ WHERE item = 11467
 /* UPDATEs */
 UPDATE creature_loot_template
 SET ChanceOrQuestChance = -14
-WHERE entry = 7039
+WHERE entry = 7032
   AND item = 11266;
 
 UPDATE creature_loot_template
