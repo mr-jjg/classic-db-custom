@@ -122,7 +122,7 @@ WHERE entry IN (7452, 7453, 7454)
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -18
+SET ChanceOrQuestChance = 18
 WHERE item = 12434
   AND entry IN (7447, 7448, 7449);
 
@@ -135,7 +135,7 @@ WHERE item = 12434
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = 15
 WHERE item = 12436
   AND entry IN (7429, 7428);
 
@@ -148,7 +148,7 @@ WHERE item = 12436
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = 15
 WHERE item = 12430
   AND entry IN (7433, 7430, 7432, 7434, 7431);
 
@@ -161,7 +161,7 @@ WHERE item = 12430
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = 15
 WHERE item = 12435
   AND entry IN (7460, 7459, 7458, 7457);
 
@@ -174,7 +174,7 @@ WHERE item = 12435
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -18
+SET ChanceOrQuestChance = 18
 WHERE item = 12432
   AND entry IN (7446, 7445, 7443, 7444);
 
@@ -187,7 +187,7 @@ WHERE item = 12432
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = 15
 WHERE item = 12433
   AND entry IN (7453, 7454, 7452, 7451, 7450);
 
@@ -200,7 +200,7 @@ WHERE item = 12433
 
 /* UPDATEs */
 UPDATE creature_loot_template
-SET ChanceOrQuestChance = -15
+SET ChanceOrQuestChance = 15
 WHERE item = 12431
   AND entry IN (7438, 7439, 7440, 7442, 7441, 10916, 10738);
 
